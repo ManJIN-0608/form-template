@@ -5,6 +5,9 @@ import * as Yup from 'yup'
 //Mui components
 import { RadioGroup as MuiRadioGroup, Button, Box, Typography, TextField as MuiTextField, Grid, Dialog, DialogTitle, DialogContent } from '@mui/material'
 
+
+import InputAdornment from '@mui/material/InputAdornment';
+import TextField from '@mui/material/TextField';
 //customized conponents
 import MyTextField from './components/TextField'
 import SingleSelect from './components/SingleSelect'
@@ -43,19 +46,21 @@ export default function Form2() {
             //intial values, will appear on the form when first launched
             initialValues={{
                 taskName: '',
-                comment: '',
-                // email: '',
-                // gender: '',
                 taskType: '',
                 assignee: [],
-                date: new Date()
+                due_date: new Date(),
+                expected_days: '0',
+                expected_hours: '6',
+                comment: ''
             }}
             validationSchema={
                 //configure the validation criteria in the Yup object below 
                 Yup.object({
                     taskName: Yup.string().required('Task name required').max(20, 'Username must be 20 characters or less'),
-                    // email: Yup.string().email('Invalid email').required('Email required'),
                     taskType: Yup.string().required('Task type required'),
+                    expected_days: Yup.number().required('Expected days requied').min(0, 'days invalid'),
+                    expected_hours: Yup.number().required('Expected hours requied').min(0, 'days invalid').max(24, 'days invalid'),
+                    assignee: Yup.array().min(1, "sssss"),
                 })
             }
             onSubmit={(values, actions) => {
@@ -92,27 +97,6 @@ export default function Form2() {
                                         name='taskName'
                                         label='Task Name*'
                                     />
-
-                                    {/* <MyTextField
-                                        name='email'
-                                        label='Email*'
-                                    /> */}
-
-                                    {/* selector - for select multiple options 
-                                        to use you need: 
-                                        1. declare name and initialvalue in initialValues
-                                        2. configure the validation schema in Yup.object within validationSchema
-                                        3. create the options array, e.g. [{ label: 'l1', value: 'v1' }, { label: 'l2', value: 'v2' }...],
-                                        the first and second attribute of every element in this array must be 'label' and 'value'
-                                        4. pass name, label, options array as props to the component, name must be same as ones you use in initialValues and validationSchema
-                                        5. must used with formik liberary
-                                    */}
-
-                                    <MultipleSelect
-                                        name='assignee'
-                                        label='Assignee'
-                                        options={assigneeOptions}
-                                    />
                                 </Grid>
 
                                 <Grid item xs={6}>
@@ -130,7 +114,52 @@ export default function Form2() {
                                         label='Task Type'
                                         options={taskTypeOptions}
                                     />
+                                </Grid>
 
+                                <Grid item xs={3}>
+                                    {/* Select - for select single option
+                                        to use you need: 
+                                        1. declare name and initialvalue in initialValues
+                                        2. configure the validation schema in Yup.object within validationSchema
+                                        3. create the options array, e.g. [{ label: 'l1', value: 'v1' }, { label: 'l2', value: 'v2' }...],
+                                        the first and second attribute of every element in this array must be 'label' and 'value'
+                                        4. pass name, label, options array as props to the component, name must be same as ones you use in initialValues and validationSchema
+                                        5. must used with formik liberary
+                                    */}
+
+                                    <MyTextField
+                                        label="Expected days"
+                                        name='expected_days'
+                                        id="outlined-number"
+                                        type="number"
+                                        InputLabelProps={{
+                                            shrink: true,
+                                        }}
+                                    />
+                                </Grid>
+
+                                <Grid item xs={3}>
+                                    {/* Select - for select single option
+                                        to use you need: 
+                                        1. declare name and initialvalue in initialValues
+                                        2. configure the validation schema in Yup.object within validationSchema
+                                        3. create the options array, e.g. [{ label: 'l1', value: 'v1' }, { label: 'l2', value: 'v2' }...],
+                                        the first and second attribute of every element in this array must be 'label' and 'value'
+                                        4. pass name, label, options array as props to the component, name must be same as ones you use in initialValues and validationSchema
+                                        5. must used with formik liberary
+                                    */}
+                                    <MyTextField
+                                        name='expected_hours'
+                                        label='Expected hours'
+                                        id="outlined-number"
+                                        type="number"
+                                        InputLabelProps={{
+                                            shrink: true,
+                                        }}
+                                    />
+                                </Grid>
+
+                                <Grid item xs={6}>
                                     {/* datepicker 
                                         to use you need: 
                                         1. declare name and initialvalue in initialValues
@@ -139,26 +168,29 @@ export default function Form2() {
                                         4. must used with formik liberary
                                     */}
                                     <DatePicker
-                                        name='date'
-                                        label='Date'
+                                        name='due_date'
+                                        label='Due Date'
                                     />
+                                </Grid>
 
-                                    {/* radio groups 
+                                <Grid item xs={12}>
+                                    {/* selector - for select multiple options 
                                         to use you need: 
                                         1. declare name and initialvalue in initialValues
                                         2. configure the validation schema in Yup.object within validationSchema
-                                        3. create the options array, e.g. const options = [{ label: 'l1', value: 'v1' }, { label: 'l2', value: 'v2' }...],
+                                        3. create the options array, e.g. [{ label: 'l1', value: 'v1' }, { label: 'l2', value: 'v2' }...],
                                         the first and second attribute of every element in this array must be 'label' and 'value'
                                         4. pass name, label, options array as props to the component, name must be same as ones you use in initialValues and validationSchema
                                         5. must used with formik liberary
                                     */}
-                                    {/* <RadioGroup
-                                        name='gender'
-                                        label='Gender'
-                                        options={genderOptions}
-                                    /> */}
+                                    <MultipleSelect
+                                        name='assignee'
+                                        label='Assignee'
+                                        options={assigneeOptions}
+                                    />
                                 </Grid>
-                                <Grid item xs={12}> 
+
+                                <Grid item xs={12}>
                                     <MyTextField
                                         name='comment'
                                         label='Comment'

@@ -29,6 +29,8 @@ export default function MultipleSelect({ label, options, ...props }) {
             renderInput={(params) => (
                 <Field
                     as={MuiTextField}
+                    error = {(meta.error? true:false) && meta.touched}
+                    helperText={(meta.error? true:false) && meta.touched? meta.error : ''}
                     {...params}
                     label={label}
                     fullWidth
